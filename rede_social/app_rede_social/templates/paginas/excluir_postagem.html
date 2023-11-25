@@ -1,0 +1,24 @@
+{% extends 'paginas/base.html' %}
+{% block conteudo %}
+<style>
+    p {
+        text-align: center;
+    }
+    button {
+        margin-bottom: 7px;
+    }
+</style>
+<div class="container" style="max-width: 600px;  text-align: right; margin-top: 20px;">
+    <div class="container" style="border: 1px solid black; border-radius: 10px;">
+        <h3 style="text-align: left; margin-top: 5px;">Excluir publicação</h3>
+        <form action="#" method="POST">
+            {% csrf_token %}
+            <p style="text-align: justify;">Você deseja excluir a seguinte publicação</p>
+            <p style="overflow-wrap: break-word; text-align: justify;"><strong>Publicação:</strong> {{ postagem.texto }}</p>
+            <p style="text-align: justify;"><strong>Data da publicaçao:</strong> {{postagem.data_publicacao|date:"d-m-Y H:i"}}</p>
+            <button class="btn btn-secondary"><a href="{% url 'perfil_usuario' user %}" style="text-decoration: none; color: white;">Cancelar</a></button>
+            <button type="submit" class="btn btn-danger">Excluir</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

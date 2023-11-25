@@ -1,0 +1,53 @@
+{% extends 'paginas/base.html' %}
+{% block conteudo %}
+<style>
+    div#postagem {
+        max-width: 600px;
+        text-align: center;
+        border: 1.5px solid black;
+        border-radius: 10px;
+        margin: auto;
+        margin-top: 10px;
+    }
+    div#comentario {
+        max-width: 600px;
+        box-shadow: 0px 0px 10px #0000001c;
+        border-radius: 10px;
+        margin-bottom: 60px;
+        padding-bottom: 4px;
+    }
+    textarea:focus {
+        outline: none;
+    }
+
+</style>
+<div class="container">
+    <div id="postagem">
+        <h3 style="margin-top: 5px;">Publicação</h3>
+        <a class="container" href="{% url 'visualizar_perfil' postagem.user %}" style="text-decoration: none; color: black; display: block; text-align: left; margin-bottom: 5px;"><strong>{{postagem.user}}</strong></a>
+        <div class="container">
+            <p style="text-align: justify; overflow-wrap: break-word; margin: 5px;">{{postagem.texto}}</p>
+        </div>
+        <p style="text-align: right; margin-right: 10px; font-size: 0.9em;">{{postagem.data_publicacao|date:"d-m-Y H:i"}}</p>
+    </div>
+    <div id="comentario" class="container">
+        <h5 style="text-align: center; padding: 6px;">{{ quantidade }} Comentários</h5>
+        {% for comentario, user_name in comentarios_users %}
+        <div class="container" style="box-shadow: 0px 0px 10px inset #0000001c; margin-bottom: 3px; padding-top: 3px; border-radius: 5px;">
+            <a href="{% url 'visualizar_perfil' user_name %}" style="text-decoration: none; color: black; text-align: left;"><strong>{{user_name}}</strong></a>
+            <p style="overflow-wrap: break-word; text-align: center; margin-top: 7px; margin-bottom: 0px;">{{comentario.texto}}</p>
+            <p style="text-align: right; font-size: 0.9em; margin: 0px; padding-bottom: 3px;">{{comentario.data_comentario|date:"d-m-Y H:i"}}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="container" style="position: fixed; bottom: 0%; left: 50%; transform: translateX(-50%);max-width: 620px; margin-bottom: 1px;">
+        <form action="#" method="POST">
+            {% csrf_token %}
+            <div style="display: flex; justify-content: space-between; background-color: white;">
+                <textarea name="comentario" id="icomentario" cols="50" rows="2" maxlength="248" placeholder="Faça seu comentario..." required style="width: 90%; border-radius: 5px; resize: none; overflow-x: hidden;"></textarea>
+                <button type="submit" class="btn btn-outline-info" style="height: 52px;"><span class="material-symbols-outlined" style="display: flex; justify-content: center; align-items: center;">send</span></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

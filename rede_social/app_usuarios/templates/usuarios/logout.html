@@ -1,0 +1,10 @@
+{% extends 'paginas/base.html' %}
+{% block conteudo %}
+<div class="container" style="max-width: 600px; text-align: center; margin-top: 10px;">
+    <h2>Você saiu!</h2>
+    <form action="#" method="POST">
+        {% csrf_token %}
+        <a href="{% url 'login' %}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Fazer login</a>
+    </form>
+</div>
+{% endblock %}

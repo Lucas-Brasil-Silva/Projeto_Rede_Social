@@ -1,0 +1,12 @@
+{% extends 'paginas/base.html' %}
+{% block conteudo %}
+<div class="container" style="max-width: 600px; margin-top: 20px; text-align: right;">
+    <form action="#" method="POST">
+        {% csrf_token %}
+        <h3 style="text-align: left;">Nova publicação</h3>
+        <textarea name="publicacao" id="ipublicacao" class="form-control" cols="50" rows="4" maxlength="295" placeholder="Faça sua publicação..." contenteditable="true" required style="width: 100%; border-radius: 5px; resize: none;"></textarea>
+        <button class="btn btn-secondary" style="margin-top: 7px;"><a href="{% url 'perfil_usuario' user %}" style="text-decoration: none; color: white;">Cancelar</a></button>
+        <button type="submit" class="btn btn-primary" style="margin-top: 7px;">Publicar</button>
+    </form>
+</div>
+{% endblock %}
