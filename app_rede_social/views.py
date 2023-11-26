@@ -6,15 +6,37 @@ from .forms import PostForm, ComentarioForm
 
 
 def lista_postagens(request):
+    """
+    Lista todas as postagens ordenadas por data de publicação.
+
+    Parameters:
+    - request: HttpRequest object.
+
+    Returns:
+    - HttpResponse object.
+    """
+
     postagens = Post.objects.all().order_by("-data_publicacao")
     return render(request, "paginas/home.html", {"postagens": postagens})
 
 
 @login_required
 def perfil_usuario(request, user):
+    """
+    Exibe o perfil do usuário, incluindo suas postagens.
+
+    Parameters:
+    - request: HttpRequest object.
+    - user: Username do usuário.
+
+    Returns:
+    - HttpResponse object.
+    """
+
     user_ = User.objects.get(username=user)
     if user_.username == str(request.user):
         postagens = Post.objects.filter(user=user_.id).order_by("-data_publicacao")
+        # Lista a quantidade de comentários para cada postagem.
         lista_quant_comen = [len(Comentario.objects.filter(post=postagem)) for postagem in postagens]
         if len(postagens) > 0:
             return render(request, "paginas/perfil_usuario.html", {"postagens": zip(postagens,lista_quant_comen)})
@@ -23,6 +45,17 @@ def perfil_usuario(request, user):
 
 @login_required
 def visualizar_perfil(request, user):
+    """
+    Esta função é usada para exibir o perfil de um usuário específico, incluindo suas postagens e a quantidade de comentários em cada postagem. Se o usuário logado for o mesmo que está sendo visualizado, ele será redirecionado para a própria página de perfil.
+
+    Parameters:
+    - request: HttpRequest object.
+    - user: Username do usuário.
+
+    Returns:
+    - HttpResponse object.
+    """
+
     if not str(request.user) == user:
         user_ = User.objects.get(username=user)
         postagens = Post.objects.filter(user=user_.id).order_by("-data_publicacao")
@@ -35,6 +68,17 @@ def visualizar_perfil(request, user):
 
 @login_required
 def detalhes_postagem(request, id_postagem):
+    """
+    Essa função exibe os detalhes de uma postagem específica, incluindo o texto da postagem, os comentários associados a ela e os usuários que fizeram esses comentários. Os usuários podem adicionar novos comentários à postagem.
+
+    Parameters:
+    - request: HttpRequest object.
+    - id_postagem: Id da postagem.
+
+    Returns:
+    - HttpResponse object.
+    """
+
     if request.method == "POST":
         post = Post.objects.get(id=id_postagem).id
         user_id = User.objects.get(username=request.user)
@@ -56,6 +100,17 @@ def detalhes_postagem(request, id_postagem):
 
 @login_required
 def excluir_postagem(request, id_postagem):
+    """
+    A função é usada para excluir uma postagem específica. Se o usuário logado for o autor da postagem, a postagem será excluída e o usuário será redirecionado para a sua própria página de perfil.
+
+    Parameters:
+    - request: HttpRequest object.
+    - id_postagem: Id da postagem.
+
+    Returns:
+    - HttpResponse object.
+    """
+
     postagem = Post.objects.get(id=id_postagem)
     if request.method == "POST":
         if request.user == postagem.user:
@@ -67,6 +122,17 @@ def excluir_postagem(request, id_postagem):
 
 @login_required
 def editar_postagem(request, id_postagem):
+    """
+    Esta função permite que o autor de uma postagem edite o texto da postagem. Se o usuário logado for o autor da postagem, o texto da postagem será atualizado com o novo texto fornecido.
+
+    Parameters:
+    - request: HttpRequest object.
+    - id_postagem: Id da postagem.
+
+    Returns:
+    - HttpResponse object.
+    """
+
     postagem = Post.objects.get(id=id_postagem)
     if request.method == "POST":
         if request.user == postagem.user:
@@ -81,6 +147,16 @@ def editar_postagem(request, id_postagem):
 
 @login_required
 def nova_postagem(request):
+    """
+    A função é responsável por permitir que os usuários criem novas postagens. Se um formulário de nova postagem for enviado por meio de uma solicitação POST válida, uma nova postagem será criada e associada ao usuário logado.
+
+    Parameters:
+    - request: HttpRequest object.
+
+    Returns:
+    - HttpResponse object.
+    """
+
     if request.method == "POST":
         user_id = User.objects.get(username=request.user)
         texto = request.POST["publicacao"]

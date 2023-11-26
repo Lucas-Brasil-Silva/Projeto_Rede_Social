@@ -3,6 +3,20 @@ from django.contrib import messages
 from .forms import UserRegisterForm
 
 def novo_usuario(request):
+    """
+    View para criar um novo usuário no sistema.
+
+    Exibe um formulário de registro e processa os dados submetidos via método POST.
+    Se o formulário for válido, cria um novo usuário, exibe uma mensagem de sucesso
+    e redireciona o usuário para a página de login.
+
+    Parameters:
+    - request: HttpRequest object.
+
+    Returns:
+    - HttpResponse object.
+    """
+    
     formulario = UserRegisterForm()
     if request.method == "POST":
         formulario = UserRegisterForm(request.POST)
@@ -12,8 +26,3 @@ def novo_usuario(request):
             formulario.save()
             return redirect('login')
     return render(request, 'usuarios/registrar.html', {'formulario':formulario})
-
-# paulo
-#p@ulo1234
-# paulo2
-#p@ulo1234
